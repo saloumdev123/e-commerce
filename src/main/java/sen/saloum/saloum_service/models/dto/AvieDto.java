@@ -1,4 +1,4 @@
-package sen.saloum.saloum_service.models;
+package sen.saloum.saloum_service.models.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
