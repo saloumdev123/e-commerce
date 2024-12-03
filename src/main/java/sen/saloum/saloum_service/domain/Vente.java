@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import sen.saloum.saloum_service.models.StatutVente;
+import sen.saloum.saloum_service.models.VenteStatus;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -28,7 +29,7 @@ public class Vente {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private StatutVente statut; // ENUM: VALIDÉE, ANNULÉE
+    private VenteStatus statut; // ENUM: VALIDÉE, ANNULÉE
 
     @ManyToOne
     @JoinColumn(name = "client_id", nullable = false)
