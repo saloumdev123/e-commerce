@@ -8,8 +8,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UtilisateurDto {
-        private Long id;
-        private String nom;
-        private String prenom;
-        private String email;
+    private Long id;
+    private String nom;
+    private String prenom;
+    private String email;
+    private String adresse;
+    private String telephone;
     }
