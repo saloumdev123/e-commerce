@@ -17,10 +17,9 @@ import java.util.stream.Collectors;
 public class VenteService {
 
     private final VenteRepository venteRepository;
-    private final UtilisateurService utilisateurService; // Assuming you have a service for Utilisateur
-    private final LigneVenteService ligneVenteService; // Assuming you have a service for LigneVente
+    private final UtilisateurService utilisateurService;
+    private final LigneVenteService ligneVenteService;
 
-    // Retrieve all ventes
     public List<VenteDto> getAllVentes() {
         return venteRepository.findAll()
                 .stream()
@@ -28,13 +27,11 @@ public class VenteService {
                 .collect(Collectors.toList());
     }
 
-    // Retrieve a vente by ID
     public Optional<VenteDto> getVenteById(Long id) {
         return venteRepository.findById(id)
                 .map(this::mapToDto);
     }
 
-    // Create or update a vente
     @Transactional
     public VenteDto saveVente(VenteDto venteDto) {
         Vente vente = mapToEntity(venteDto);
@@ -42,36 +39,36 @@ public class VenteService {
         return mapToDto(savedVente);
     }
 
-    // Delete a vente by ID
+
     public void deleteVente(Long id) {
         venteRepository.deleteById(id);
     }
 
-    // Map Vente entity to VenteDto
+
     public VenteDto mapToDto(Vente vente) {
         return new VenteDto(
                 vente.getId(),
                 vente.getDateVente(),
                 vente.getMontantTotal(),
                 vente.getStatut(),
-                utilisateurService.mapToDto(vente.getClient()), // Nested mapping for Utilisateur
+                utilisateurService.mapToDto(vente.getClient()),
                 vente.getLignes().stream()
                         .map(ligneVenteService::mapToDto)
-                        .collect(Collectors.toList()) // Nested mapping for LigneVente
+                        .collect(Collectors.toList())
         );
     }
 
-    // Map VenteDto to Vente entity
+
     public Vente mapToEntity(VenteDto venteDto) {
         Vente vente = new Vente();
         vente.setId(venteDto.getId());
         vente.setDateVente(venteDto.getDateVente());
         vente.setMontantTotal(venteDto.getMontantTotal());
         vente.setStatut(venteDto.getStatut());
-        vente.setClient(utilisateurService.mapToEntity(venteDto.getClient())); // Nested mapping for Utilisateur
+        vente.setClient(utilisateurService.mapToEntity(venteDto.getClient()));
         vente.setLignes(venteDto.getLignes().stream()
                 .map(ligneVenteService::mapToEntity)
-                .collect(Collectors.toList())); // Nested mapping for LigneVente
+                .collect(Collectors.toList()));
         return vente;
     }
 }
