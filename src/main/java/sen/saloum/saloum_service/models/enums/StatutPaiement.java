@@ -1,4 +1,4 @@
-package sen.saloum.saloum_service.models;
+package sen.saloum.saloum_service.models.enums;
 
 public enum StatutPaiement {
 

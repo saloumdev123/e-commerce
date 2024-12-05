@@ -26,3 +26,8 @@ logging:
     org:
       springframework:
         orm: DEBUG # Niveau de log pour les transactions ORM
+
+    org.springframework: INFO
+    sen.saloum.saloum_service: DEBUG
+  file:
+    name: logs/application.log

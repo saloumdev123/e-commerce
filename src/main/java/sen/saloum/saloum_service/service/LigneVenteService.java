@@ -7,6 +7,7 @@ import sen.saloum.saloum_service.domain.Product;
 import sen.saloum.saloum_service.models.dto.LigneVenteDto;
 import sen.saloum.saloum_service.repos.LigneVenteRepository;
 import sen.saloum.saloum_service.repos.ProductRepository;
+import sen.saloum.saloum_service.service.interfaces.ILigneVenteService;
 
 
 import java.util.List;
@@ -14,7 +15,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class LigneVenteService {
+public class LigneVenteService implements ILigneVenteService {
 
     private final LigneVenteRepository ligneVenteRepository;
     private final ProductRepository productRepository;
@@ -37,6 +38,27 @@ public class LigneVenteService {
         LigneVente savedLigneVente = ligneVenteRepository.save(ligneVente);
         return mapToDto(savedLigneVente);
     }
+    public LigneVenteDto updateLigneVente(Long id, LigneVenteDto ligneVenteDto) {
+        // Find the existing LigneVente by ID
+        LigneVente existingLigneVente = ligneVenteRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Ligne de vente non trouvée avec l'ID: " + id));
+
+        // Update the fields of the LigneVente entity
+        Product product = productRepository.findByNom(ligneVenteDto.getProductName())
+                .orElseThrow(() -> new IllegalArgumentException("Produit non trouvé: " + ligneVenteDto.getProductName()));
+
+        existingLigneVente.setProduct(product);
+        existingLigneVente.setQuantite(ligneVenteDto.getQuantite());
+        existingLigneVente.setPrixUnitaire(ligneVenteDto.getPrixUnitaire());
+        existingLigneVente.setSousTotal(ligneVenteDto.getSousTotal());
+
+        // Save the updated LigneVente
+        LigneVente updatedLigneVente = ligneVenteRepository.save(existingLigneVente);
+
+        // Map the updated entity to DTO and return it
+        return mapToDto(updatedLigneVente);
+    }
+
 
     public void deleteLigneVente(Long id) {
         ligneVenteRepository.deleteById(id);

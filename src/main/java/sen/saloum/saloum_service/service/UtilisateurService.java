@@ -31,7 +31,7 @@ public class UtilisateurService {
                 .map(this::mapToDto);
     }
 
-    // Create or update a utilisateur
+    // Create or update an utilisateur
     public UtilisateurDto saveUtilisateur(UtilisateurDto utilisateurDto) {
         Utilisateur utilisateur = mapToEntity(utilisateurDto);
         Utilisateur savedUtilisateur = utilisateurRepository.save(utilisateur);
@@ -53,6 +53,27 @@ public class UtilisateurService {
                 utilisateur.getAdresse(),
                 utilisateur.getEmail()
         );
+    }
+    public UtilisateurDto updateUser(Long id, UtilisateurDto utilisateurDto) {
+        Optional<Utilisateur> optionalUtilisateur = utilisateurRepository.findById(id);
+
+        if (optionalUtilisateur.isEmpty()) {
+            throw new IllegalArgumentException("Utilisateur introuvable avec l'ID: " + id);
+        }
+
+        Utilisateur utilisateur = optionalUtilisateur.get();
+
+        // Update fields from DTO
+        utilisateur.setNom(utilisateurDto.getNom());
+        utilisateur.setPrenom(utilisateurDto.getPrenom());
+        utilisateur.setEmail(utilisateurDto.getEmail());
+        utilisateur.setMotDePasse(utilisateur.getMotDePasse());
+
+        // Save updated user
+        Utilisateur updatedUtilisateur = utilisateurRepository.save(utilisateur);
+
+        // Return updated DTO
+        return mapToDto(updatedUtilisateur);
     }
 
     // Map UtilisateurDto to Utilisateur entity

@@ -32,17 +32,18 @@ public class Product {
     private String imageUrl;
 
     private LocalDateTime dateAjout;
-    @ManyToOne
+
+    @ManyToOne(optional = false)
     @JoinColumn(name = "categorie_id", nullable = false)
-    private Categorie categorie; // Relation vers Categorie
+    private Categorie categorie;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<LigneCommande> lignesCommande; // Liste des commandes liées
+    private List<LigneCommande> lignesCommande;
 
     @OneToOne(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Stocke stock; // Relation One-to-One avec Stock
+    private Stocke stock;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<LigneVente> lignesVente; // Liste des lignes liées à ce produit
+    private List<LigneVente> lignesVente;
 
 }

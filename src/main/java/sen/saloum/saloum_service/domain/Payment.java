@@ -1,7 +1,7 @@
 package sen.saloum.saloum_service.domain;
 
-import sen.saloum.saloum_service.models.ModePaiement;
-import sen.saloum.saloum_service.models.StatutPaiement;
+import sen.saloum.saloum_service.models.enums.ModePaiement;
+import sen.saloum.saloum_service.models.enums.StatutPaiement;
 
 import java.time.LocalDateTime;
 

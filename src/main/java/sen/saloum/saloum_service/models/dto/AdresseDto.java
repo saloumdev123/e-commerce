@@ -3,7 +3,7 @@ package sen.saloum.saloum_service.models.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import sen.saloum.saloum_service.models.TypeAdresse;
+import sen.saloum.saloum_service.models.enums.TypeAdresse;
 
 @Data
 @AllArgsConstructor

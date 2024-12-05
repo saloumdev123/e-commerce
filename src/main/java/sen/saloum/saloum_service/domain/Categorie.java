@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -23,5 +24,6 @@ public class Categorie {
     private String description;
 
     @OneToMany(mappedBy = "categorie", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Product> products; // Liste des produits dans la catégorie
+    private List<Product> products = new ArrayList<>();
 }
+

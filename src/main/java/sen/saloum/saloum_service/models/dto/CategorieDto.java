@@ -14,8 +14,6 @@ public class CategorieDto {
     private Long id;
     private String nom;
     private String description;
-
     private List<ProductDto> products;
-
 
 }

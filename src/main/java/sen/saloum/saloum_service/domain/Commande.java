@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import sen.saloum.saloum_service.models.StatutCommande;
+import sen.saloum.saloum_service.models.enums.StatutCommande;
 
 import java.time.LocalDateTime;
 import java.util.List;

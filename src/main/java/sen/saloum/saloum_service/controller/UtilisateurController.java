@@ -57,6 +57,27 @@ public class UtilisateurController {
         }
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<ResponseWrapper<UtilisateurDto>> updateUtilisateur(
+            @PathVariable Long id,
+            @RequestBody UtilisateurDto utilisateurDto) {
+
+        try {
+            UtilisateurDto updatedUtilisateur = utilisateurService.updateUser(id, utilisateurDto);
+            return ResponseEntity.ok(new ResponseWrapper<>(
+                    "Utilisateur mis à jour avec succès",
+                    updatedUtilisateur,
+                    true
+            ));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseWrapper<>(
+                    e.getMessage(),
+                    null,
+                    false
+            ));
+        }
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<ResponseWrapper<Void>> deleteUtilisateur(@PathVariable Long id) {
         try {
