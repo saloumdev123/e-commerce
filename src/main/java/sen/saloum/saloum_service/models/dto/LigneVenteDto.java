@@ -9,8 +9,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class LigneVenteDto {
     private Long id;
-    private String productName;
+    private String nom;
     private Integer quantite;
     private Double prixUnitaire;
     private Double sousTotal;
+    private VenteDto vente;
 }
