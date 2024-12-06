@@ -11,7 +11,7 @@ import sen.saloum.saloum_service.service.LigneVenteService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/ligne-vente")
+@RequestMapping("/api/ligne-vente")
 @RequiredArgsConstructor
 public class LigneVenteController {
 
