@@ -6,5 +6,5 @@ import sen.saloum.saloum_service.domain.Product;
 import java.util.Optional;
 
 public interface ProductRepository  extends JpaRepository<Product, Long> {
-    Optional<Product> findByNom(String productName);
+    Optional<Product> findByNom(String nom);
 }
