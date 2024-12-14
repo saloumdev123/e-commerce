@@ -41,23 +41,22 @@ public class VenteService {
 
     @Transactional
     public VenteDto updateVente(Long id, VenteDto venteDto) {
-        // Fetch the existing Vente
         Vente existingVente = venteRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Vente introuvable avec l'ID: " + id));
 
-        // Update fields from DTO
         existingVente.setDateVente(venteDto.getDateVente());
         existingVente.setMontantTotal(venteDto.getMontantTotal());
         existingVente.setStatut(venteDto.getStatut());
         existingVente.setClient(utilisateurService.mapToEntity(venteDto.getClient()));
-        existingVente.setLignes(venteDto.getLignes().stream()
+
+        // Handle null case for lignes
+        existingVente.setLignes(Optional.ofNullable(venteDto.getLignes())
+                .orElse(List.of())
+                .stream()
                 .map(ligneVenteService::mapToEntity)
                 .collect(Collectors.toList()));
 
-        // Save updated entity
         Vente updatedVente = venteRepository.save(existingVente);
-
-        // Return updated DTO
         return mapToDto(updatedVente);
     }
 
@@ -88,9 +87,15 @@ public class VenteService {
         vente.setMontantTotal(venteDto.getMontantTotal());
         vente.setStatut(venteDto.getStatut());
         vente.setClient(utilisateurService.mapToEntity(venteDto.getClient()));
-        vente.setLignes(venteDto.getLignes().stream()
+
+        // Handle null case for lignes
+        vente.setLignes(Optional.ofNullable(venteDto.getLignes())
+                .orElse(List.of())
+                .stream()
                 .map(ligneVenteService::mapToEntity)
                 .collect(Collectors.toList()));
+
         return vente;
     }
+
 }
