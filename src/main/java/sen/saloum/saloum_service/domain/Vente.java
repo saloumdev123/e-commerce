@@ -29,13 +29,13 @@ public class Vente {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private VenteStatus statut; // ENUM: VALIDÉE, ANNULÉE
+    private VenteStatus statut;
 
     @ManyToOne
     @JoinColumn(name = "client_id", nullable = false)
-    private Utilisateur client; // Relation vers Utilisateur
+    private Utilisateur client;
 
     @OneToMany(mappedBy = "vente", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<LigneVente> lignes; // Liste des produits vendus
+    private List<LigneVente> lignes;
 
 }
