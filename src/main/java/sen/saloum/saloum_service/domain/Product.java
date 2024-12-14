@@ -1,15 +1,19 @@
 package sen.saloum.saloum_service.domain;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import jakarta.validation.constraints.Min;
+import lombok.*;
+
+
 
 import java.time.LocalDateTime;
 import java.util.List;
+import jakarta.validation.constraints.NotNull;
+
 
 @Entity
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class Product {
@@ -33,7 +37,7 @@ public class Product {
 
     private LocalDateTime dateAjout;
 
-    @ManyToOne(optional = false)
+    @ManyToOne
     @JoinColumn(name = "categorie_id", nullable = false)
     private Categorie categorie;
 
