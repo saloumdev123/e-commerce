@@ -21,7 +21,7 @@ public class LigneCommande {
 
     @ManyToOne
     @JoinColumn(name = "product_id", nullable = false)
-    private Product product; // Relation vers Produit
+    private Product product;
 
     @Column(nullable = false)
     private Integer quantite;
@@ -30,6 +30,7 @@ public class LigneCommande {
     private Double prixUnitaire;
 
     @Column(nullable = false)
-    private Double sousTotal; // calculé : prixUnitaire * quantite
+    private Double sousTotal;
+
 
 }
