@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 @Data
 @AllArgsConstructor
@@ -13,9 +14,9 @@ public class AvieDto {
 
     private Long id;
     private String commentaire;
-    private Integer note; // Évaluation entre 1 et 5
-    private LocalDateTime dateCreation;
-    private Long produitId; // ID du produit associé
-    private Long utilisateurId; // ID de l'utilisateur (auteur de l'avis)
+    private Integer note;
+    private OffsetDateTime dateCreation;
+    private ProductDto produit;
+    private UtilisateurDto utilisateur;
 
 }
