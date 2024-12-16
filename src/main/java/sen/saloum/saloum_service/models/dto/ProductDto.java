@@ -8,6 +8,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -23,6 +25,11 @@ public class ProductDto {
     private Double prix;
     private Integer quantiteEnStock;
     private String imageUrl;
-    private LocalDateTime dateAjout;
+    private OffsetDateTime dateAjout;
     private CategorieDto categorie;
+    private List<AvieDto> avies;
+    public ProductDto(Long id, String nom) {
+        this.id = id;
+        this.nom = nom;
+    }
 }

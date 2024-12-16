@@ -7,7 +7,9 @@ import lombok.*;
 
 
 import java.time.LocalDateTime;
-import java.util.List;
+import java.time.OffsetDateTime;
+import java.util.*;
+
 import jakarta.validation.constraints.NotNull;
 
 
@@ -35,7 +37,7 @@ public class Product {
 
     private String imageUrl;
 
-    private LocalDateTime dateAjout;
+    private OffsetDateTime dateAjout;
 
     @ManyToOne
     @JoinColumn(name = "categorie_id", nullable = false)
@@ -49,5 +51,9 @@ public class Product {
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<LigneVente> lignesVente;
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Avie> avies = new ArrayList<>();
+
 
 }

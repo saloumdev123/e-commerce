@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import sen.saloum.saloum_service.models.enums.Roles;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -39,10 +40,12 @@ public class Utilisateur {
     private LocalDateTime dateCreation;
 
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Vente> ventes; // Liste des ventes effectuées par l'utilisateur
+    private List<Vente> ventes;
 
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Commande> commandes; // Liste des commandes effectuées par l'utilisateur
+    private List<Commande> commandes;
 
+    @OneToMany(mappedBy = "utilisateur", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Avie> avies = new ArrayList<>();
 
 }

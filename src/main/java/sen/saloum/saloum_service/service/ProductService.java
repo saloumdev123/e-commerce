@@ -15,6 +15,7 @@ import sen.saloum.saloum_service.repos.ProductRepository;
 import sen.saloum.saloum_service.service.interfaces.IProduct;
 
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -64,6 +65,7 @@ public class ProductService implements IProduct {
         existingProduct.setPrix(productDto.getPrix());
         existingProduct.setQuantiteEnStock(productDto.getQuantiteEnStock());
         existingProduct.setImageUrl(productDto.getImageUrl());
+        existingProduct.setDateAjout(OffsetDateTime.now());
         existingProduct.setCategorie(dtoMapper.mapToCategorieEntity(productDto.getCategorie()));
 
         Product updatedProduct = productRepository.save(existingProduct);
