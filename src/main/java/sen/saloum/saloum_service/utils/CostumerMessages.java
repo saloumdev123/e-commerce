@@ -12,5 +12,6 @@ public class CostumerMessages {
     public static String USER_NOT_FOUND = "Utilisateur non trouvé.";
     public static String USER_CREATED = "Utilisateur créé avec succès.";
     public static String USER_CREATION_FAILED = "Échec de la création de l'utilisateur.";
+    public static String FETCH_AVIE_ID = "";
 
 }
