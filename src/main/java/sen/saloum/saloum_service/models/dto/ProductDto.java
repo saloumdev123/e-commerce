@@ -32,4 +32,10 @@ public class ProductDto {
         this.id = id;
         this.nom = nom;
     }
+
+    public ProductDto(Long id, String nom, Double prix) {
+        this.id = id;
+        this.nom = nom;
+        this.prix=prix;
+    }
 }
