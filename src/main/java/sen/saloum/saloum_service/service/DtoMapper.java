@@ -6,6 +6,7 @@ import sen.saloum.saloum_service.domain.Product;
 import sen.saloum.saloum_service.models.dto.CategorieDto;
 import sen.saloum.saloum_service.models.dto.ProductDto;
 
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
@@ -47,7 +48,7 @@ public class DtoMapper {
         product.setPrix(productDto.getPrix());
         product.setQuantiteEnStock(productDto.getQuantiteEnStock());
         product.setImageUrl(productDto.getImageUrl());
-        product.setDateAjout(productDto.getDateAjout());
+        product.setDateAjout(OffsetDateTime.now());
 
         if (productDto.getCategorie() != null) {
             product.setCategorie(mapToCategorieEntity(productDto.getCategorie()));
