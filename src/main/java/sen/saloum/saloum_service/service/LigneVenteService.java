@@ -16,6 +16,7 @@ import sen.saloum.saloum_service.service.interfaces.ILigneVenteService;
 
 
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -72,25 +73,22 @@ public class LigneVenteService implements ILigneVenteService {
                         newProduct.setDescription("Default description for " + ligneVenteDto.getNom());
                         newProduct.setPrix(ligneVenteDto.getPrixUnitaire());
                         newProduct.setQuantiteEnStock(100);
-                        newProduct.setDateAjout(LocalDateTime.now());
+                        newProduct.setDateAjout(OffsetDateTime.now());
                         Categorie defaultCategorie = categorieRepository.findById(1L)
                                 .orElseThrow(() -> new RuntimeException("Default category not found"));
                         newProduct.setCategorie(defaultCategorie);
                         return productRepository.save(newProduct);
                     });
 
-            // Create and set the LigneVente entity
             LigneVente ligneVente = new LigneVente();
-            ligneVente.setVente(vente);  // Ensure Vente is set here
+            ligneVente.setVente(vente);
             ligneVente.setProduct(product);
             ligneVente.setQuantite(ligneVenteDto.getQuantite());
             ligneVente.setPrixUnitaire(product.getPrix());
             ligneVente.setSousTotal(ligneVenteDto.getQuantite() * product.getPrix());
 
-            // Save the LigneVente entity
             LigneVente savedLigneVente = ligneVenteRepository.save(ligneVente);
 
-            // Return the saved entity as DTO
             return mapToDto(savedLigneVente);
 
         } catch (Exception e) {

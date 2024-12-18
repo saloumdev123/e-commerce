@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import sen.saloum.saloum_service.models.enums.VenteStatus;
 
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 
 @Data
@@ -13,7 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 public class VenteDto {
     private Long id;
-    private LocalDateTime dateVente;
+    private OffsetDateTime dateVente;
     private Double montantTotal;
     private VenteStatus statut;
     private UtilisateurDto client;

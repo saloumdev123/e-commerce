@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import sen.saloum.saloum_service.models.enums.VenteStatus;
 
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 
 @Entity
@@ -22,7 +23,7 @@ public class Vente {
     private Long id;
 
     @Column(nullable = false)
-    private LocalDateTime dateVente;
+    private OffsetDateTime dateVente;
 
     @Column(nullable = false)
     private Double montantTotal;

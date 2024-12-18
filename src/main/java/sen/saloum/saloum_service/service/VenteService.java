@@ -8,6 +8,7 @@ import sen.saloum.saloum_service.models.dto.VenteDto;
 import sen.saloum.saloum_service.repos.VenteRepository;
 
 
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -44,12 +45,12 @@ public class VenteService {
         Vente existingVente = venteRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Vente introuvable avec l'ID: " + id));
 
-        existingVente.setDateVente(venteDto.getDateVente());
+        existingVente.setDateVente(OffsetDateTime.now());
         existingVente.setMontantTotal(venteDto.getMontantTotal());
         existingVente.setStatut(venteDto.getStatut());
+        existingVente.setDateVente(OffsetDateTime.now());
         existingVente.setClient(utilisateurService.mapToEntity(venteDto.getClient()));
 
-        // Handle null case for lignes
         existingVente.setLignes(Optional.ofNullable(venteDto.getLignes())
                 .orElse(List.of())
                 .stream()
