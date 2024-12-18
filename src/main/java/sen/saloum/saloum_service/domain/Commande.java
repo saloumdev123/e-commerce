@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import sen.saloum.saloum_service.models.enums.StatutCommande;
 
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 
 
@@ -21,19 +22,20 @@ public class Commande {
     private Long id;
 
     @Column(nullable = false)
-    private LocalDateTime dateCommande;
+    private OffsetDateTime dateCommande;
 
     @Column(nullable = false)
     private Double montantTotal;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private StatutCommande statut; // ENUM: EN_ATTENTE, VALIDÉE, ANNULÉE
+    private StatutCommande statut;
 
     @ManyToOne
     @JoinColumn(name = "client_id", nullable = false)
-    private Utilisateur client; // Relation vers Utilisateur
+    private Utilisateur client;
 
     @OneToMany(mappedBy = "commande", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<LigneCommande> lignes; // Liste des produits commandés
+    private List<LigneCommande> lignes;
+
 }
