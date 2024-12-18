@@ -20,76 +20,49 @@ public class UtilisateurController {
     private final UtilisateurService utilisateurService;
 
     @GetMapping
-    public ResponseEntity<ResponseWrapper<List<UtilisateurDto>>> getAllUtilisateurs() {
+    public ResponseEntity<List<UtilisateurDto>> getAllUtilisateurs() {
         List<UtilisateurDto> utilisateurs = utilisateurService.getAllUtilisateurs();
-        ResponseWrapper<List<UtilisateurDto>> response = new ResponseWrapper<>(
-                CostumerMessages.FETCH_USERS_SUCCESS, null, false);
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(utilisateurs);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ResponseWrapper<UtilisateurDto>> getUtilisateurById(@PathVariable Long id) {
+    public ResponseEntity<UtilisateurDto> getUtilisateurById(@PathVariable Long id) {
         return utilisateurService.getUtilisateurById(id)
-                .map(utilisateur -> {
-                    ResponseWrapper<UtilisateurDto> response = new ResponseWrapper<>(
-                            CostumerMessages.FETCH_USER_SUCCESS, null, false);
-                    return ResponseEntity.ok(response);
-                })
-                .orElseGet(() -> {
-                    ResponseWrapper<UtilisateurDto> response = new ResponseWrapper<>(
-                            CostumerMessages.USER_NOT_FOUND, null, false);
-                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
-                });
+                .map(utilisateur -> ResponseEntity.ok(utilisateur))
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 
     @PostMapping
-    public ResponseEntity<ResponseWrapper<UtilisateurDto>> createUtilisateur(@RequestBody UtilisateurDto utilisateurDto) {
+    public ResponseEntity<UtilisateurDto> createUtilisateur(@RequestBody UtilisateurDto utilisateurDto) {
         try {
             UtilisateurDto savedUtilisateur = utilisateurService.saveUtilisateur(utilisateurDto);
-            ResponseWrapper<UtilisateurDto> response = new ResponseWrapper<>(
-                    CostumerMessages.USER_CREATED, null, false);
-            return ResponseEntity.status(HttpStatus.CREATED).body(response);
+            return ResponseEntity.status(HttpStatus.CREATED).body(savedUtilisateur);
         } catch (Exception e) {
             e.printStackTrace();
-            ResponseWrapper<UtilisateurDto> response = new ResponseWrapper<>(
-                    CostumerMessages. USER_CREATION_FAILED, null, false);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ResponseWrapper<UtilisateurDto>> updateUtilisateur(
+    public ResponseEntity<UtilisateurDto> updateUtilisateur(
             @PathVariable Long id,
             @RequestBody UtilisateurDto utilisateurDto) {
-
         try {
             UtilisateurDto updatedUtilisateur = utilisateurService.updateUser(id, utilisateurDto);
-            return ResponseEntity.ok(new ResponseWrapper<>(
-                    "Utilisateur mis à jour avec succès",
-                    updatedUtilisateur,
-                    true
-            ));
+            return ResponseEntity.ok(updatedUtilisateur);
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseWrapper<>(
-                    e.getMessage(),
-                    null,
-                    false
-            ));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<ResponseWrapper<Void>> deleteUtilisateur(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteUtilisateur(@PathVariable Long id) {
         try {
             utilisateurService.deleteUtilisateur(id);
-            ResponseWrapper<Void> response = new ResponseWrapper<>(
-                    CostumerMessages.DELETE_USER, null, false);
             return ResponseEntity.noContent().build();
         } catch (Exception e) {
             e.printStackTrace();
-            ResponseWrapper<Void> response = new ResponseWrapper<>(
-                    CostumerMessages.USER_DELETION_FAILED, null, false);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 }
