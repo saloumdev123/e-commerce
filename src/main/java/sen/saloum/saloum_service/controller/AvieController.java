@@ -8,6 +8,7 @@ import sen.saloum.saloum_service.models.dto.AvieDto;
 
 import sen.saloum.saloum_service.models.dto.ResponseWrapper;
 import sen.saloum.saloum_service.service.AvieService;
+import sen.saloum.saloum_service.utils.CostumerMessages;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,52 +21,44 @@ public class AvieController {
     private final AvieService avieService;
 
     @GetMapping
-    public ResponseEntity<ResponseWrapper<List<AvieDto>>> getAllAvies() {
+    public ResponseEntity<List<AvieDto>> getAllAvies() {
         List<AvieDto> avies = avieService.allAvies();
-        ResponseWrapper<List<AvieDto>> response = new ResponseWrapper<>("Avies fetched successfully", avies, true);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return new ResponseEntity<>(avies, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ResponseWrapper<AvieDto>> getAvieById(@PathVariable Long id) {
+    public ResponseEntity<AvieDto> getAvieById(@PathVariable Long id) {
         Optional<AvieDto> avieDto = avieService.getById(id);
         if (avieDto.isPresent()) {
-            ResponseWrapper<AvieDto> response = new ResponseWrapper<>("Avie fetched successfully", avieDto.get(), true);
-            return new ResponseEntity<>(response, HttpStatus.OK);
+            return new ResponseEntity<>(avieDto.get(), HttpStatus.FOUND);
         } else {
-            ResponseWrapper<AvieDto> response = new ResponseWrapper<>("Avie not found", null, false);
-            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
     @PostMapping
-    public ResponseEntity<ResponseWrapper<AvieDto>> createAvie(@RequestBody AvieDto avieDto) {
+    public ResponseEntity<AvieDto> createAvie(@RequestBody AvieDto avieDto) {
         try {
             AvieDto savedAvie = avieService.save(avieDto);
-            ResponseWrapper<AvieDto> response = new ResponseWrapper<>("Avie created successfully", savedAvie, true);
-            return new ResponseEntity<>(response, HttpStatus.CREATED);
+            return new ResponseEntity<>(savedAvie, HttpStatus.CREATED);
         } catch (IllegalArgumentException e) {
-            ResponseWrapper<AvieDto> response = new ResponseWrapper<>(e.getMessage(), null, false);
-            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ResponseWrapper<AvieDto>> updateAvie(@PathVariable Long id, @RequestBody AvieDto avieDto) {
+    public ResponseEntity<AvieDto> updateAvie(@PathVariable Long id, @RequestBody AvieDto avieDto) {
         try {
             AvieDto updatedAvie = avieService.update(id, avieDto);
-            ResponseWrapper<AvieDto> response = new ResponseWrapper<>("Avie updated successfully", updatedAvie, true);
-            return new ResponseEntity<>(response, HttpStatus.OK);
+            return new ResponseEntity<>(updatedAvie, HttpStatus.OK);
         } catch (IllegalArgumentException e) {
-            ResponseWrapper<AvieDto> response = new ResponseWrapper<>(e.getMessage(), null, false);
-            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<ResponseWrapper<Void>> deleteAvie(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteAvie(@PathVariable Long id) {
         avieService.delete(id);
-        ResponseWrapper<Void> response = new ResponseWrapper<>("Avie deleted successfully", null, true);
-        return new ResponseEntity<>(response, HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
