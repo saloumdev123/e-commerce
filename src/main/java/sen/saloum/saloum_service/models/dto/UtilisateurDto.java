@@ -18,7 +18,7 @@ public class UtilisateurDto {
     private String telephone;
     private String motDePasse;
     private List<AvieDto> avies;
-    // UtilisateurDto constructor
+
     public UtilisateurDto(Long id, String nom) {
         this.id = id;
         this.nom = nom;
