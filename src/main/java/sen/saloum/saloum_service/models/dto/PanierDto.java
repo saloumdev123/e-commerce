@@ -10,8 +10,8 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PanierDto {
-    private Long id;
-    private UtilisateurDto utilisateur;
-    private List<LignePanierDto> lignes;
 
+    private Long id;
+    private Long utilisateurId;
+    private List<LignePanierDto> lignes;
 }
