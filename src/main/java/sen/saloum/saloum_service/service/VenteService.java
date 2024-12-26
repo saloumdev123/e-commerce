@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import sen.saloum.saloum_service.domain.Vente;
 import sen.saloum.saloum_service.models.dto.VenteDto;
 import sen.saloum.saloum_service.repos.VenteRepository;
+import sen.saloum.saloum_service.service.interfaces.IVente;
 
 
 import java.time.OffsetDateTime;
@@ -15,12 +16,13 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class VenteService {
+public class VenteService implements IVente {
 
     private final VenteRepository venteRepository;
     private final UtilisateurService utilisateurService;
     private final LigneVenteService ligneVenteService;
 
+    @Override
     public List<VenteDto> getAllVentes() {
         return venteRepository.findAll()
                 .stream()
@@ -28,12 +30,14 @@ public class VenteService {
                 .collect(Collectors.toList());
     }
 
+    @Override
     public Optional<VenteDto> getVenteById(Long id) {
         return venteRepository.findById(id)
                 .map(this::mapToDto);
     }
 
     @Transactional
+    @Override
     public VenteDto saveVente(VenteDto venteDto) {
         Vente vente = mapToEntity(venteDto);
         Vente savedVente = venteRepository.save(vente);
@@ -41,6 +45,7 @@ public class VenteService {
     }
 
     @Transactional
+    @Override
     public VenteDto updateVente(Long id, VenteDto venteDto) {
         Vente existingVente = venteRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Vente introuvable avec l'ID: " + id));
@@ -62,10 +67,10 @@ public class VenteService {
     }
 
 
+    @Override
     public void deleteVente(Long id) {
         venteRepository.deleteById(id);
     }
-
 
     public VenteDto mapToDto(Vente vente) {
         return new VenteDto(
