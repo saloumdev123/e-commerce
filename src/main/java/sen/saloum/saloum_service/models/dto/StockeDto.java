@@ -11,5 +11,5 @@ public class StockeDto {
     private Long id;
     private Integer quantiteDisponible;
     private Integer seuilAlerte;
-    private ProductDto product;
+    private Long product;
 }
