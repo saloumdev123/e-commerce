@@ -17,7 +17,6 @@ public class UtilisateurService {
 
     private final UtilisateurRepository utilisateurRepository;
 
-    // Retrieve all utilisateurs
     public List<UtilisateurDto> getAllUtilisateurs() {
         return utilisateurRepository.findAll()
                 .stream()
@@ -41,6 +40,15 @@ public class UtilisateurService {
 //        String hashedPassword = passwordEncoder.encode(utilisateurDto.getMotDePasse());
 
         Utilisateur utilisateur = mapToEntity(utilisateurDto);
+        utilisateur.setNom(utilisateurDto.getNom());
+        utilisateur.setPrenom(utilisateurDto.getPrenom());
+        utilisateur.setEmail(utilisateurDto.getEmail());
+        utilisateur.setAdresse(utilisateurDto.getAdresse());
+        utilisateur.setTelephone(utilisateurDto.getTelephone());
+        utilisateur.setMotDePasse(utilisateurDto.getMotDePasse());
+//        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+//        String hashedPassword = passwordEncoder.encode(utilisateurDto.getMotDePasse());
+//        utilisateur.setMotDePasse(hashedPassword);
         Utilisateur savedUtilisateur = utilisateurRepository.save(utilisateur);
         return mapToDto(savedUtilisateur);
     }
