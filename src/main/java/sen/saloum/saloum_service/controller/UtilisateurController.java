@@ -34,6 +34,12 @@ public class UtilisateurController {
 
     @PostMapping
     public ResponseEntity<UtilisateurDto> createUtilisateur(@RequestBody UtilisateurDto utilisateurDto) {
+
+        if (utilisateurDto.getMotDePasse() == null || utilisateurDto.getMotDePasse().isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new UtilisateurDto(null, "Mot de passe est obligatoire"));
+        }
+
         try {
             UtilisateurDto savedUtilisateur = utilisateurService.saveUtilisateur(utilisateurDto);
             return ResponseEntity.status(HttpStatus.CREATED).body(savedUtilisateur);
