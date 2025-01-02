@@ -16,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 public class DtoMapper {
 
+    // Mapping Product entity to ProductDto
     public ProductDto mapToProductDto(Product product) {
         ProductDto productDto = new ProductDto();
         productDto.setId(product.getId());
@@ -25,16 +26,14 @@ public class DtoMapper {
         productDto.setImageUrl(product.getImageUrl());
         productDto.setQuantiteEnStock(product.getQuantiteEnStock());
 
+        // Now map only the Categorie ID to the ProductDto
         if (product.getCategorie() != null) {
-            CategorieDto categorieDto = new CategorieDto();
-            categorieDto.setId(product.getCategorie().getId()); // Map only the ID to avoid recursion
-            categorieDto.setNom(product.getCategorie().getNom());
-            categorieDto.setDescription(product.getDescription());
-            productDto.setCategorie(categorieDto);
+            productDto.setCategorieId(product.getCategorie().getId()); // Set only the ID
         }
         return productDto;
     }
 
+    // Mapping ProductDto to Product entity
     public Product mapToProductEntity(ProductDto productDto) {
         if (productDto == null) {
             log.error("Cannot map a null ProductDto to Product entity.");
@@ -50,13 +49,16 @@ public class DtoMapper {
         product.setImageUrl(productDto.getImageUrl());
         product.setDateAjout(OffsetDateTime.now());
 
-        if (productDto.getCategorie() != null) {
-            product.setCategorie(mapToCategorieEntity(productDto.getCategorie()));
+        // We now map the Categorie using the Categorie ID from ProductDto
+        if (productDto.getCategorieId() != null) {
+            product.setCategorie(new Categorie()); // Creating an empty Categorie object
+            product.getCategorie().setId(productDto.getCategorieId()); // Set the Categorie ID
         }
         log.info("Successfully mapped ProductDto to Product entity: {}", product);
         return product;
     }
 
+    // Mapping Categorie entity to CategorieDto
     public CategorieDto mapToCategorieDto(Categorie categorie) {
         if (categorie == null) {
             log.error("Cannot map a null Categorie entity to CategorieDto.");
@@ -68,6 +70,7 @@ public class DtoMapper {
         categorieDto.setNom(categorie.getNom());
         categorieDto.setDescription(categorie.getDescription());
 
+        // If needed, map products to CategorieDto
         if (categorie.getProducts() != null) {
             categorieDto.setProducts(
                     categorie.getProducts().stream()
@@ -81,16 +84,15 @@ public class DtoMapper {
         return categorieDto;
     }
 
-    public Categorie mapToCategorieEntity(CategorieDto categorieDto) {
-        if (categorieDto == null) {
-            log.error("Cannot map a null CategorieDto to Categorie entity.");
-            throw new IllegalArgumentException("CategorieDto cannot be null");
+    // Mapping Categorie ID to Categorie entity
+    public Categorie mapToCategorieEntity(Long categorieId) {
+        if (categorieId == null) {
+            log.error("Cannot map a null CategorieId to Categorie entity.");
+            throw new IllegalArgumentException("CategorieId cannot be null");
         }
-        log.debug("Mapping CategorieDto to Categorie entity: {}", categorieDto);
+        log.debug("Mapping CategorieId to Categorie entity: {}", categorieId);
         Categorie categorie = new Categorie();
-        categorie.setId(categorieDto.getId());
-        categorie.setNom(categorieDto.getNom());
-        categorie.setDescription(categorieDto.getDescription());
+        categorie.setId(categorieId); // Set only the Categorie ID
         return categorie;
     }
 }
