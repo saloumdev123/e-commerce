@@ -46,10 +46,14 @@ public class ProductService implements IProduct {
 
     @Override
     public ProductDto saveProduct(ProductDto productDto) {
-        Categorie categorie = getOrCreateCategorie(productDto);
+        Categorie categorie = categorieRepository.findById(productDto.getCategorieId())
+                .orElseThrow(() -> new RuntimeException("Categorie not found with ID: " + productDto.getCategorieId()));
+
+        // Map ProductDto to Product entity and set the Categorie
         Product product = dtoMapper.mapToProductEntity(productDto);
         product.setCategorie(categorie);
 
+        // Save and return the saved Product as a ProductDto
         Product savedProduct = productRepository.save(product);
         return dtoMapper.mapToProductDto(savedProduct);
     }
@@ -60,14 +64,20 @@ public class ProductService implements IProduct {
         Product existingProduct = productRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Product not found with ID: " + id));
 
+        // Update fields
         existingProduct.setNom(productDto.getNom());
         existingProduct.setDescription(productDto.getDescription());
         existingProduct.setPrix(productDto.getPrix());
         existingProduct.setQuantiteEnStock(productDto.getQuantiteEnStock());
         existingProduct.setImageUrl(productDto.getImageUrl());
         existingProduct.setDateAjout(OffsetDateTime.now());
-        existingProduct.setCategorie(dtoMapper.mapToCategorieEntity(productDto.getCategorie()));
 
+        // Update the Categorie
+        Categorie categorie = categorieRepository.findById(productDto.getCategorieId())
+                .orElseThrow(() -> new RuntimeException("Categorie not found with ID: " + productDto.getCategorieId()));
+        existingProduct.setCategorie(categorie);
+
+        // Save the updated Product and return as a ProductDto
         Product updatedProduct = productRepository.save(existingProduct);
         return dtoMapper.mapToProductDto(updatedProduct);
     }
@@ -80,12 +90,14 @@ public class ProductService implements IProduct {
         productRepository.deleteById(id);
     }
 
-    private Categorie getOrCreateCategorie(ProductDto productDto) {
-        if (productDto.getCategorie() == null || productDto.getCategorie().getId() == null) {
+    public Categorie getOrCreateCategorie(ProductDto productDto) {
+        if (productDto.getCategorieId() == null) {
+            // Fallback to a default Categorie if no ID is provided
             return categorieRepository.findById(1L)
                     .orElseThrow(() -> new RuntimeException("Default Categorie not found"));
         }
-        return categorieRepository.findById(productDto.getCategorie().getId())
-                .orElseThrow(() -> new RuntimeException("Categorie not found with ID: " + productDto.getCategorie().getId()));
+        // Find the Categorie by ID
+        return categorieRepository.findById(productDto.getCategorieId())
+                .orElseThrow(() -> new RuntimeException("Categorie not found with ID: " + productDto.getCategorieId()));
     }
 }
