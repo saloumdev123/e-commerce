@@ -26,7 +26,7 @@ public class ProductDto {
     private Integer quantiteEnStock;
     private String imageUrl;
     private OffsetDateTime dateAjout;
-    private CategorieDto categorie;
+    private Long categorieId;
     private List<AvieDto> avies;
     public ProductDto(Long id, String nom) {
         this.id = id;
