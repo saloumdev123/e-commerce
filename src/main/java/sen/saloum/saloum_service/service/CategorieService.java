@@ -39,7 +39,7 @@ public class CategorieService implements ICategorieService {
 
     @Override
     public CategorieDto saveCategorie(CategorieDto categorieDto) {
-        Categorie categorie = dtoMapper.mapToCategorieEntity(categorieDto);
+        Categorie categorie = dtoMapper.mapToCategorieEntity(categorieDto.getId()) ;
 
         if (categorieDto.getProducts() != null) {
             List<Product> products = categorieDto.getProducts().stream()

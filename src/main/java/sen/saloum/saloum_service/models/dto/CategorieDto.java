@@ -20,4 +20,5 @@ public class CategorieDto {
         this.id=id;
         this.nom=nom;
     }
+
 }
