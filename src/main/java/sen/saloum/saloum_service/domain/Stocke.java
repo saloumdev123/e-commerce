@@ -24,5 +24,5 @@ public class Stocke {
 
     @OneToOne
     @JoinColumn(name = "produit_id", nullable = false)
-    private Product product; // Relation One-to-One vers Produit
+    private Product product;
 }
