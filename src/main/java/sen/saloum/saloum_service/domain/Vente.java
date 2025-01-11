@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import sen.saloum.saloum_service.models.enums.VenteStatus;
 
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 
 @Entity
@@ -22,20 +23,20 @@ public class Vente {
     private Long id;
 
     @Column(nullable = false)
-    private LocalDateTime dateVente;
+    private OffsetDateTime dateVente;
 
     @Column(nullable = false)
     private Double montantTotal;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private VenteStatus statut; // ENUM: VALIDÉE, ANNULÉE
+    private VenteStatus statut;
 
     @ManyToOne
     @JoinColumn(name = "client_id", nullable = false)
-    private Utilisateur client; // Relation vers Utilisateur
+    private Utilisateur client;
 
     @OneToMany(mappedBy = "vente", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<LigneVente> lignes; // Liste des produits vendus
+    private List<LigneVente> lignes;
 
 }

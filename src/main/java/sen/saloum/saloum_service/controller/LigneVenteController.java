@@ -19,73 +19,50 @@ public class LigneVenteController {
     private final LigneVenteService ligneVenteService;
 
     @GetMapping
-    public ResponseEntity<ResponseWrapper<List<LigneVenteDto>>> getAllLignesVente() {
+    public ResponseEntity<List<LigneVenteDto>> getAllLignesVente() {
         List<LigneVenteDto> lignesVente = ligneVenteService.getAllLignesVente();
-        ResponseWrapper<List<LigneVenteDto>> response = new ResponseWrapper<>(
-                "Lignes de vente récupérées avec succès", lignesVente, true);
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(lignesVente);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ResponseWrapper<LigneVenteDto>> getLigneVenteById(@PathVariable Long id) {
+    public ResponseEntity<LigneVenteDto> getLigneVenteById(@PathVariable Long id) {
         try {
             LigneVenteDto ligneVente = ligneVenteService.getLigneVenteById(id);
-            ResponseWrapper<LigneVenteDto> response = new ResponseWrapper<>(
-                    "Ligne de vente récupérée avec succès", ligneVente, true);
-            return ResponseEntity.ok(response);
+            return ResponseEntity.ok(ligneVente);
         } catch (Exception e) {
-            ResponseWrapper<LigneVenteDto> response = new ResponseWrapper<>(
-                    "Ligne de vente non trouvée avec l'ID: " + id, null, false);
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
     }
 
     @PostMapping
-    public ResponseEntity<ResponseWrapper<LigneVenteDto>> createLigneVente(@RequestBody LigneVenteDto ligneVenteDto) {
+    public ResponseEntity<LigneVenteDto> createLigneVente(@RequestBody LigneVenteDto ligneVenteDto) {
         try {
             LigneVenteDto createdLigneVente = ligneVenteService.saveLigneVente(ligneVenteDto);
-            ResponseWrapper<LigneVenteDto> response = new ResponseWrapper<>(
-                    "Ligne de vente créée avec succès", createdLigneVente, true);
-            return ResponseEntity.status(HttpStatus.CREATED).body(response);
+            return ResponseEntity.status(HttpStatus.CREATED).body(createdLigneVente);
         } catch (Exception e) {
-            ResponseWrapper<LigneVenteDto> response = new ResponseWrapper<>(
-                    "Erreur lors de la création de la ligne de vente", null, false);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
 
-
     @PutMapping("/{id}")
-    public ResponseEntity<ResponseWrapper<LigneVenteDto>> updateLigneVente(
-            @PathVariable Long id, @RequestBody LigneVenteDto ligneVenteDto) {
+    public ResponseEntity<LigneVenteDto> updateLigneVente(@PathVariable Long id, @RequestBody LigneVenteDto ligneVenteDto) {
         try {
             LigneVenteDto updatedLigneVente = ligneVenteService.updateLigneVente(id, ligneVenteDto);
-            ResponseWrapper<LigneVenteDto> response = new ResponseWrapper<>(
-                    "Ligne de vente mise à jour avec succès", updatedLigneVente, true);
-            return ResponseEntity.ok(response);
+            return ResponseEntity.ok(updatedLigneVente);
         } catch (IllegalArgumentException e) {
-            ResponseWrapper<LigneVenteDto> response = new ResponseWrapper<>(
-                    e.getMessage(), null, false);
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         } catch (Exception e) {
-            ResponseWrapper<LigneVenteDto> response = new ResponseWrapper<>(
-                    "Erreur interne lors de la mise à jour de la ligne de vente", null, false);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<ResponseWrapper<Void>> deleteLigneVente(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteLigneVente(@PathVariable Long id) {
         try {
             ligneVenteService.deleteLigneVente(id);
-            ResponseWrapper<Void> response = new ResponseWrapper<>(
-                    "Ligne de vente supprimée avec succès", null, true);
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         } catch (Exception e) {
-            ResponseWrapper<Void> response = new ResponseWrapper<>(
-                    "Erreur lors de la suppression de la ligne de vente", null, false);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
-
 }

@@ -20,9 +20,9 @@ public class Panier {
 
     @OneToOne
     @JoinColumn(name = "utilisateur_id", nullable = false)
-    private Utilisateur utilisateur; // Relation One-to-One avec Utilisateur
+    private Utilisateur utilisateur;
 
     @OneToMany(mappedBy = "panier", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<LignePanier> lignes; // Liste des produits dans le panier
+    private List<LignePanier> lignes;
 
 }

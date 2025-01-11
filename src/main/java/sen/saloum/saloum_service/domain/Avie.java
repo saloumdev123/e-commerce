@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 @Data
 @AllArgsConstructor
@@ -21,17 +22,16 @@ public class Avie {
     private String commentaire;
 
     @Column(nullable = false)
-    private Integer note; // Évaluation entre 1 et 5
+    private Integer note;
 
     @Column(nullable = false)
-    private LocalDateTime dateCreation;
+    private OffsetDateTime dateCreation;
 
     @ManyToOne
     @JoinColumn(name = "produit_id", nullable = false)
-    private Product product; // Relation vers Produit
+    private Product product;
 
     @ManyToOne
     @JoinColumn(name = "utilisateur_id", nullable = false)
-    private Utilisateur utilisateur; // Relation vers Utilisateur (l'auteur de l'avis)
-
+    private Utilisateur utilisateur;
 }

@@ -20,80 +20,45 @@ public class VenteController {
 
     // Retrieve all ventes
     @GetMapping
-    public ResponseEntity<ResponseWrapper<List<VenteDto>>> getAllVentes() {
+    public ResponseEntity<List<VenteDto>> getAllVentes() {
         List<VenteDto> ventes = venteService.getAllVentes();
-        return ResponseEntity.ok(new ResponseWrapper<>(
-                "Liste des ventes récupérée avec succès",
-                ventes,
-                true
-        ));
+        return ResponseEntity.ok(ventes);
     }
 
     // Retrieve a vente by ID
     @GetMapping("/{id}")
-    public ResponseEntity<ResponseWrapper<VenteDto>> getVenteById(@PathVariable Long id) {
+    public ResponseEntity<VenteDto> getVenteById(@PathVariable Long id) {
         Optional<VenteDto> vente = venteService.getVenteById(id);
-
-        if (vente.isPresent()) {
-            return ResponseEntity.ok(new ResponseWrapper<>(
-                    "Vente trouvée avec succès",
-                    vente.get(),
-                    true
-            ));
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseWrapper<>(
-                    "Vente introuvable avec l'ID: " + id,
-                    null,
-                    false
-            ));
-        }
+        return vente.map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 
     // Create a vente
     @PostMapping
-    public ResponseEntity<ResponseWrapper<VenteDto>> saveVente(@RequestBody VenteDto venteDto) {
+    public ResponseEntity<VenteDto> saveVente(@RequestBody VenteDto venteDto) {
         VenteDto savedVente = venteService.saveVente(venteDto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseWrapper<>(
-                "Vente créée avec succès",
-                savedVente,
-                true
-        ));
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedVente);
     }
 
     // Update a vente
     @PutMapping("/{id}")
-    public ResponseEntity<ResponseWrapper<VenteDto>> updateVente(
-            @PathVariable Long id,
-            @RequestBody VenteDto venteDto) {
-
+    public ResponseEntity<VenteDto> updateVente(@PathVariable Long id, @RequestBody VenteDto venteDto) {
         try {
             VenteDto updatedVente = venteService.updateVente(id, venteDto);
-            return ResponseEntity.ok(new ResponseWrapper<>(
-                    "Vente mise à jour avec succès",
-                    updatedVente,
-                    true
-            ));
+            return ResponseEntity.ok(updatedVente);
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseWrapper<>(
-                    e.getMessage(),
-                    null,
-                    false
-            ));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
 
     // Delete a vente
     @DeleteMapping("/{id}")
-    public ResponseEntity<ResponseWrapper<Void>> deleteVente(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteVente(@PathVariable Long id) {
         try {
             venteService.deleteVente(id);
             return ResponseEntity.noContent().build();
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ResponseWrapper<>(
-                    "Échec de la suppression de la vente",
-                    null,
-                    false
-            ));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 }

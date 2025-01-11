@@ -17,14 +17,12 @@ public class CategorieController {
 
     private final CategorieService categorieService;
 
-    // Retrieve all categories
     @GetMapping
     public ResponseEntity<List<CategorieDto>> getAllCategories() {
         List<CategorieDto> categories = categorieService.getAllCategories();
         return new ResponseEntity<>(categories, HttpStatus.OK);
     }
 
-    // Retrieve a category by ID
     @GetMapping("/{id}")
     public ResponseEntity<CategorieDto> getCategorieById(@PathVariable Long id) {
         Optional<CategorieDto> categorieDto = categorieService.getCategorieById(id);
@@ -33,14 +31,12 @@ public class CategorieController {
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    // Create a new category
     @PostMapping
     public ResponseEntity<CategorieDto> createCategorie(@RequestBody CategorieDto categorieDto) {
         CategorieDto createdCategorie = categorieService.saveCategorie(categorieDto);
         return new ResponseEntity<>(createdCategorie, HttpStatus.CREATED);
     }
 
-    // Update an existing category
     @PutMapping("/{id}")
     public ResponseEntity<CategorieDto> updateCategorie(@PathVariable Long id, @RequestBody CategorieDto categorieDto) {
         try {
@@ -51,7 +47,6 @@ public class CategorieController {
         }
     }
 
-    // Delete a category by ID
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCategorie(@PathVariable Long id) {
         categorieService.deleteCategorie(id);

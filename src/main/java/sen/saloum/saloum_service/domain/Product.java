@@ -1,15 +1,21 @@
 package sen.saloum.saloum_service.domain;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import jakarta.validation.constraints.Min;
+import lombok.*;
+
+
 
 import java.time.LocalDateTime;
-import java.util.List;
+import java.time.OffsetDateTime;
+import java.util.*;
+
+import jakarta.validation.constraints.NotNull;
+
 
 @Entity
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class Product {
@@ -31,9 +37,9 @@ public class Product {
 
     private String imageUrl;
 
-    private LocalDateTime dateAjout;
+    private OffsetDateTime dateAjout;
 
-    @ManyToOne(optional = false)
+    @ManyToOne
     @JoinColumn(name = "categorie_id", nullable = false)
     private Categorie categorie;
 
@@ -45,5 +51,9 @@ public class Product {
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<LigneVente> lignesVente;
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Avie> avies = new ArrayList<>();
+
 
 }

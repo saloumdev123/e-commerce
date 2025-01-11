@@ -6,20 +6,23 @@ import org.springframework.transaction.annotation.Transactional;
 import sen.saloum.saloum_service.domain.Vente;
 import sen.saloum.saloum_service.models.dto.VenteDto;
 import sen.saloum.saloum_service.repos.VenteRepository;
+import sen.saloum.saloum_service.service.interfaces.IVente;
 
 
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class VenteService {
+public class VenteService implements IVente {
 
     private final VenteRepository venteRepository;
     private final UtilisateurService utilisateurService;
     private final LigneVenteService ligneVenteService;
 
+    @Override
     public List<VenteDto> getAllVentes() {
         return venteRepository.findAll()
                 .stream()
@@ -27,12 +30,14 @@ public class VenteService {
                 .collect(Collectors.toList());
     }
 
+    @Override
     public Optional<VenteDto> getVenteById(Long id) {
         return venteRepository.findById(id)
                 .map(this::mapToDto);
     }
 
     @Transactional
+    @Override
     public VenteDto saveVente(VenteDto venteDto) {
         Vente vente = mapToEntity(venteDto);
         Vente savedVente = venteRepository.save(vente);
@@ -40,32 +45,32 @@ public class VenteService {
     }
 
     @Transactional
+    @Override
     public VenteDto updateVente(Long id, VenteDto venteDto) {
-        // Fetch the existing Vente
         Vente existingVente = venteRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Vente introuvable avec l'ID: " + id));
 
-        // Update fields from DTO
-        existingVente.setDateVente(venteDto.getDateVente());
+        existingVente.setDateVente(OffsetDateTime.now());
         existingVente.setMontantTotal(venteDto.getMontantTotal());
         existingVente.setStatut(venteDto.getStatut());
+        existingVente.setDateVente(OffsetDateTime.now());
         existingVente.setClient(utilisateurService.mapToEntity(venteDto.getClient()));
-        existingVente.setLignes(venteDto.getLignes().stream()
+
+        existingVente.setLignes(Optional.ofNullable(venteDto.getLignes())
+                .orElse(List.of())
+                .stream()
                 .map(ligneVenteService::mapToEntity)
                 .collect(Collectors.toList()));
 
-        // Save updated entity
         Vente updatedVente = venteRepository.save(existingVente);
-
-        // Return updated DTO
         return mapToDto(updatedVente);
     }
 
 
+    @Override
     public void deleteVente(Long id) {
         venteRepository.deleteById(id);
     }
-
 
     public VenteDto mapToDto(Vente vente) {
         return new VenteDto(
@@ -88,9 +93,15 @@ public class VenteService {
         vente.setMontantTotal(venteDto.getMontantTotal());
         vente.setStatut(venteDto.getStatut());
         vente.setClient(utilisateurService.mapToEntity(venteDto.getClient()));
-        vente.setLignes(venteDto.getLignes().stream()
+
+        // Handle null case for lignes
+        vente.setLignes(Optional.ofNullable(venteDto.getLignes())
+                .orElse(List.of())
+                .stream()
                 .map(ligneVenteService::mapToEntity)
                 .collect(Collectors.toList()));
+
         return vente;
     }
+
 }

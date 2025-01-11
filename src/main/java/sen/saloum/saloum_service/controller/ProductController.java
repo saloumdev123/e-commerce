@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import sen.saloum.saloum_service.domain.Categorie;
 import sen.saloum.saloum_service.models.dto.ProductDto;
 import sen.saloum.saloum_service.service.ProductService;
 
@@ -21,40 +22,40 @@ public class ProductController {
     @GetMapping
     public ResponseEntity<List<ProductDto>> getAllProducts() {
         List<ProductDto> products = productService.getAllProducts();
-        return new ResponseEntity<>(products, HttpStatus.OK);
+        return ResponseEntity.ok(products);
     }
 
-    // Retrieve a product by ID
+    // Get a product by ID
     @GetMapping("/{id}")
     public ResponseEntity<ProductDto> getProductById(@PathVariable Long id) {
-        Optional<ProductDto> productDto = productService.getProductById(id);
-        return productDto
-                .map(dto -> new ResponseEntity<>(dto, HttpStatus.OK))
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        return productService.getProductById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     // Create a new product
     @PostMapping
     public ResponseEntity<ProductDto> createProduct(@RequestBody ProductDto productDto) {
-        ProductDto createdProduct = productService.saveProduct(productDto);
-        return new ResponseEntity<>(createdProduct, HttpStatus.CREATED);
+        ProductDto savedProduct = productService.saveProduct(productDto);
+        return ResponseEntity.ok(savedProduct);
     }
 
     // Update an existing product
     @PutMapping("/{id}")
     public ResponseEntity<ProductDto> updateProduct(@PathVariable Long id, @RequestBody ProductDto productDto) {
-        try {
-            ProductDto updatedProduct = productService.updateProduct(id, productDto);
-            return new ResponseEntity<>(updatedProduct, HttpStatus.OK);
-        } catch (IllegalArgumentException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        ProductDto updatedProduct = productService.updateProduct(id, productDto);
+        return ResponseEntity.ok(updatedProduct);
     }
 
-    // Delete a product by ID
+    // Delete a product
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
         productService.deleteProduct(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return ResponseEntity.noContent().build();
+    }
+    @PostMapping("/get-or-create-categorie")
+    public ResponseEntity<Categorie> getOrCreateCategorie(@RequestBody ProductDto productDto) {
+        Categorie categorie = productService.getOrCreateCategorie(productDto);
+        return ResponseEntity.ok(categorie);
     }
 }

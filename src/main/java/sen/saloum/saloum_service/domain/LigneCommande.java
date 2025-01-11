@@ -6,8 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Data
 public class LigneCommande {
 
@@ -17,11 +17,11 @@ public class LigneCommande {
 
     @ManyToOne
     @JoinColumn(name = "commande_id", nullable = false)
-    private Commande commande; // Relation vers Commande
+    private Commande commande;
 
     @ManyToOne
     @JoinColumn(name = "product_id", nullable = false)
-    private Product product; // Relation vers Produit
+    private Product product;
 
     @Column(nullable = false)
     private Integer quantite;
@@ -30,6 +30,6 @@ public class LigneCommande {
     private Double prixUnitaire;
 
     @Column(nullable = false)
-    private Double sousTotal; // calculé : prixUnitaire * quantite
+    private Double sousTotal;
 
 }

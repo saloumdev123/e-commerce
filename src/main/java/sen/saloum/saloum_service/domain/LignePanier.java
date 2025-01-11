@@ -17,11 +17,11 @@ public class LignePanier {
 
     @ManyToOne
     @JoinColumn(name = "panier_id", nullable = false)
-    private Panier panier; // Relation vers Panier
+    private Panier panier;
 
     @ManyToOne
     @JoinColumn(name = "product_id", nullable = false)
-    private Product product; // Relation vers Produit
+    private Product product;
 
     @Column(nullable = false)
     private Integer quantite;
@@ -30,5 +30,5 @@ public class LignePanier {
     private Double prixUnitaire;
 
     @Column(nullable = false)
-    private Double sousTotal; // Calculé : prixUnitaire * quantite
+    private Double sousTotal;
 }

@@ -16,4 +16,9 @@ public class CategorieDto {
     private String description;
     private List<ProductDto> products;
 
+    public CategorieDto(Long id, String nom) {
+        this.id=id;
+        this.nom=nom;
+    }
+
 }
