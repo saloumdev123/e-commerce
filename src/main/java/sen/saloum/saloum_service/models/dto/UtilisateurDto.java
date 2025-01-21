@@ -3,6 +3,7 @@ package sen.saloum.saloum_service.models.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import sen.saloum.saloum_service.models.enums.Roles;
 
 import java.util.List;
 
@@ -17,6 +18,7 @@ public class UtilisateurDto {
     private String adresse;
     private String telephone;
     private String motDePasse;
+    private Roles role;
     private List<AvieDto> avies;
 
     public UtilisateurDto(Long id, String nom) {
