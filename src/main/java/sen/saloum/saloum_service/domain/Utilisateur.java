@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import sen.saloum.saloum_service.models.enums.Roles;
 
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,7 +38,7 @@ public class Utilisateur {
     @Enumerated(EnumType.STRING)
     private Roles role;
 
-    private LocalDateTime dateCreation;
+    private OffsetDateTime dateCreation;
 
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Vente> ventes;
