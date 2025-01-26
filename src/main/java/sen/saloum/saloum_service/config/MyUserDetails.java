@@ -1,14 +1,16 @@
 package sen.saloum.saloum_service.config;
 
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import sen.saloum.saloum_service.domain.Utilisateur;
 
 import java.util.Collection;
+import java.util.Collections;
 
 public class MyUserDetails implements UserDetails {
 
-    private Utilisateur utilisateur;
+    private final Utilisateur utilisateur;
 
     public MyUserDetails(Utilisateur utilisateur) {
         this.utilisateur = utilisateur;
@@ -16,7 +18,7 @@ public class MyUserDetails implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null; // Implement authorities if needed
+        return Collections.singleton(new SimpleGrantedAuthority(utilisateur.getRole().name()));
     }
 
     @Override
