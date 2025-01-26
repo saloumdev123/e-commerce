@@ -1,5 +1,6 @@
 package sen.saloum.saloum_service.config;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -9,10 +10,11 @@ import sen.saloum.saloum_service.domain.Utilisateur;
 import sen.saloum.saloum_service.repos.UtilisateurRepository;
 
 @Service
+@RequiredArgsConstructor
 public class MyUserDetailsService implements UserDetailsService {
 
-    @Autowired
-    private UtilisateurRepository utilisateurRepository;
+
+    private final UtilisateurRepository utilisateurRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
