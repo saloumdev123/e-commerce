@@ -1,5 +1,6 @@
 package sen.saloum.saloum_service.config;
 
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -9,6 +10,7 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -18,12 +20,17 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
-@RequiredArgsConstructor
 public class SecurityConfigurer {
 
     private final UserDetailsService myUserDetailsService;
     private final JwtRequestFilter jwtRequestFilter;
     private final AuthenticationConfiguration authenticationConfiguration;
+
+    public SecurityConfigurer(UserDetailsService myUserDetailsService, JwtRequestFilter jwtRequestFilter, AuthenticationConfiguration authenticationConfiguration) {
+        this.myUserDetailsService = myUserDetailsService;
+        this.jwtRequestFilter = jwtRequestFilter;
+        this.authenticationConfiguration = authenticationConfiguration;
+    }
 
     @Bean
     public AuthenticationManager authenticationManager() throws Exception {
@@ -38,11 +45,14 @@ public class SecurityConfigurer {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
-                .csrf(csrf -> csrf.disable())
+                .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/authenticate", "/register").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/products/**").hasRole("ADMIN, CLIENT")
-                        .requestMatchers("/api/products/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/products/**").permitAll()
+                        .requestMatchers(HttpMethod.POST,  "/api/products/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT,  "/api/products/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE,  "/api/products/**").hasRole("ADMIN")
+                        //.requestMatchers("/api/products/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session
@@ -51,6 +61,7 @@ public class SecurityConfigurer {
                 .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
+
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
         return (web) -> web.ignoring().requestMatchers("/authenticate");
