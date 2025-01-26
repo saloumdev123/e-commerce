@@ -47,16 +47,27 @@ public class AuthenticationController {
         newUser.setRole(utilisateurDto.getRole());
         newUser.setDateCreation(OffsetDateTime.now());
         utilisateurRepository.save(newUser);
-        return "User registered successfully";
+
+        // Authenticate the newly registered user
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(utilisateurDto.getEmail(),
+                        utilisateurDto.getMotDePasse())
+        );
+
+        // Generate JWT token
+        final UserDetails userDetails = userDetailsService.loadUserByUsername(utilisateurDto.getEmail());
+        final String jwt = jwtUtil.generateToken(userDetails.getUsername());
+
+        return jwt;
     }
 
     @PostMapping("/authenticate")
     public String createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) throws Exception {
         authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(), authenticationRequest.getPassword())
+                new UsernamePasswordAuthenticationToken(authenticationRequest.getEmail(), authenticationRequest.getMotDePasse())
         );
 
-        final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
+        final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getEmail());
         final String jwt = jwtUtil.generateToken(userDetails.getUsername());
 
         return jwt;
